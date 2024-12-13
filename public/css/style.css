@@ -1,3 +1,24 @@
 .row {
   margin:0px;
 }
+
+.buySellListItem {
+  height: 35px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #0000001a;
+  padding:0px 10px;
+}
+
+.buySellListItem img {
+  height: 19px;
+}
+
+.buyColor {
+  background-color:#23442D;
+}
+
+.sellColor {
+  background-color:#62212D;
+}

@@ -30,8 +30,21 @@ function updateDOM(tradingPair) {
   doms.buySellList.innerHTML = trades
     .map((trade) => {
       return `
-        <div style="background-color:${trade.type === 'Sell' ? 'red' : 'green'};">
-          [${tradingPair.toUpperCase()}] $${trade.total}
+        <div class="buySellListItem ${trade.type === 'Sell' ? 'sellColor' : 'buyColor'}">
+          <div class="row">
+            <div class="col-auto">
+              <img src="./img/exchanges/binance.png">
+            </div>
+            <div class="col">
+              ${tradingPair.toUpperCase()}
+            </div>
+            <div class="col-3 text-end">
+              ${parseFloat(trade.price).toFixed(4)}
+            </div>
+            <div class="col-3 text-end">
+              $${trade.total}
+            </div>
+          </div>
         </div>
       `;
     })
