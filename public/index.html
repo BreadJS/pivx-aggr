@@ -12,9 +12,25 @@
 
 <body>
   <main>
-    <div class="row">
-      <div class="col-10">
-        Hey there
+    <div class="row" style="height:100%">
+      <div class="col-10 p-0">
+        <div class="tradingview-widget-container" style="height:100%;width:100%">
+          <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+          {
+            "autosize": true,
+            "symbol": "BINANCE:PIVXUSDT",
+            "interval": "1",
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "locale": "en",
+            "allow_symbol_change": true,
+            "calendar": false,
+            "support_host": "https://www.tradingview.com"
+          }
+          </script>
+        </div>
       </div>
       <div class="col-2 p-0" style="overflow: auto; height: 100%;">
         <div id="buySellList"></div>
