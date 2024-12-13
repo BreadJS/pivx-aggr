@@ -17,6 +17,7 @@ const tradeData = {
 // Thresholds
 let threshold1 = 20;
 let threshold2 = 500;
+let maximumItems = 50;
 
 // Sound event queue
 const soundQueue = [];
@@ -69,7 +70,7 @@ function setupWebSocket(tradingPair) {
     }
 
     // Ensure the array size does not exceed 20
-    if (tradeData[tradingPair].length > 20) {
+    if (tradeData[tradingPair].length > maximumItems) {
       tradeData[tradingPair].pop();
     }
 
