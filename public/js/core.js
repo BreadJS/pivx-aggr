@@ -16,7 +16,7 @@ const tradeData = {
 
 // Thresholds
 let threshold1 = 20;
-let threshold2 = 500;
+let threshold2 = 1000;
 let maximumItems = 50;
 
 // Sound event queue
@@ -24,13 +24,39 @@ const soundQueue = [];
 let isPlayingSound = false;
 const SOUND_DELAY = 1; // Delay in milliseconds between sound triggers
 
+// Number formatting
+function formatNumber(num) {
+  if (num >= 1000000) {
+      return (num / 1000000).toFixed(2) + "M";
+  } else if (num >= 1000) {
+      return (num / 1000).toFixed(2) + "K";
+  } else {
+      return num.toFixed(2);
+  }
+}
+
 // Function to update the DOM based on trade data
 function updateDOM(tradingPair) {
   const trades = tradeData[tradingPair];
   doms.buySellList.innerHTML = trades
     .map((trade) => {
+      let colorType;
+      if(trade.type === 'Sell') {
+        if(trade.total >= threshold2) {
+          colorType = "sellSuperColor";
+        } else {
+          colorType = "sellColor";
+        }
+      } else {
+        if(trade.total >= threshold2) {
+          colorType = "buySuperColor";
+        } else {
+          colorType = "buyColor";
+        }
+      }
+      
       return `
-        <div class="buySellListItem ${trade.type === 'Sell' ? 'sellColor' : 'buyColor'}">
+        <div class="buySellListItem ${colorType}">
           <div class="row">
             <div class="col-auto">
               <img src="./img/exchanges/binance.png">
@@ -42,7 +68,7 @@ function updateDOM(tradingPair) {
               ${parseFloat(trade.price).toFixed(4)}
             </div>
             <div class="col-3 text-end">
-              $${trade.total}
+              $${formatNumber(parseFloat(trade.total))}
             </div>
           </div>
         </div>

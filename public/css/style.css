@@ -22,3 +22,11 @@
 .sellColor {
   background-color:#62212D;
 }
+
+.buySuperColor {
+  background-color:#4BAD4F!important;
+}
+
+.sellSuperColor {
+  background-color:#E73544!important;
+}
