@@ -14,8 +14,8 @@
 <body>
   <main>
     <div class="row" style="height:100%">
-      <div class="col-10 p-0">
-        <div class="tradingview-widget-container" style="height:100%;width:100%">
+      <div class="col-12 col-width-chart p-0 col-height-chart">
+        <div class="tradingview-widget-container" style="height:100%; width:100%">
           <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
           <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
           {
@@ -33,6 +33,7 @@
           </script>
         </div>
       </div>
+      <div class="col-12 col-width-items p-0 col-height-items" style="overflow: auto;">
         <div class="lastVolume">
           
           <div class="bar-container">
@@ -76,6 +77,7 @@
           </div>
 
         </div>
+        <div style="overflow: auto; height: calc(100% - 160px);" id="buySellList"></div>
       </div>
     </div>
   </main>

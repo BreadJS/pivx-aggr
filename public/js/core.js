@@ -59,18 +59,15 @@ function updateDOM(tradingPair) {
       
       return `
         <div class="buySellListItem ${colorType}">
-          <div class="row">
-            <div class="col-auto">
-              <img src="./img/exchanges/binance.png">
+          <div class="row" style="width:100%">
+            <div class="col-4 col-md-6">
+              <img src="./img/exchanges/binance.png"> ${tradingPair.toUpperCase()}
             </div>
-            <div class="col">
-              ${tradingPair.toUpperCase()}
-            </div>
-            <div class="col-3 text-end">
+            <div class="col-4 col-md-3 text-end">
               ${parseFloat(trade.price).toFixed(4)}
             </div>
-            <div class="col-3 text-end">
-              $${formatNumber(parseFloat(trade.total))}
+            <div class="col-4 col-md-3 text-end">
+              <b>$</b>${formatNumber(parseFloat(trade.total))}
             </div>
           </div>
         </div>
