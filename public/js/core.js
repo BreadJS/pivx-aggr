@@ -14,6 +14,8 @@ const tradeData = {
   pivxbtc: []
 };
 
+const allTradeData = [];
+
 // Thresholds
 let threshold1 = 20;
 let threshold2 = 1000;
@@ -77,6 +79,29 @@ function updateDOM(tradingPair) {
     .join('');
 }
 
+function combineTradesWithinInterval(trades, intervalMs = 5 * 60 * 1000) {
+  let currentTimestamp = Date.now();
+  const filteredTrades = trades.filter(trade => currentTimestamp - trade.timestamp <= intervalMs);
+
+  // Separate and sum up 'buy' and 'sell' trades
+  const totals = filteredTrades.reduce(
+    (acc, trade) => {
+      if (trade.type === 'buy') {
+        acc.buy += parseFloat(trade.totalUSD);
+      } else if (trade.type === 'sell') {
+        acc.sell += parseFloat(trade.totalUSD);
+      }
+      return acc;
+    },
+    { buy: 0, sell: 0 } // Initialize totals for buys and sells
+  );
+
+  return {
+    totalBuys: totals.buy.toFixed(2),
+    totalSells: totals.sell.toFixed(2),
+  };
+}
+
 // Function to create a WebSocket for a trading pair
 function setupWebSocket(tradingPair) {
   const wsUrl = `${binanceSocketUrl}/${tradingPair}@trade`;
@@ -98,6 +123,21 @@ function setupWebSocket(tradingPair) {
     const trade = JSON.parse(event.data);
     const amountUSD = (trade.q * trade.p);
     
+    allTradeData.push({
+      totalUSD: amountUSD.toFixed(2),
+      timestamp: trade.E,
+      type: trade.m ? 'sell' : 'buy'
+    });
+
+    let last1mVolume = combineTradesWithinInterval(allTradeData, 1 * 60 * 1000);
+    let last5mVolume = combineTradesWithinInterval(allTradeData, 5 * 60 * 1000);
+    let las1hmVolume = combineTradesWithinInterval(allTradeData, 1 * 60 * 60 * 1000);
+    let las4hmVolume = combineTradesWithinInterval(allTradeData, 4 * 60 * 60 * 1000);
+    updateVolumeBar(last1mVolume.totalBuys, last1mVolume.totalSells, '1m');
+    updateVolumeBar(last5mVolume.totalBuys, last5mVolume.totalSells, '5m');
+    updateVolumeBar(las1hmVolume.totalBuys, las1hmVolume.totalSells, '1h');
+    updateVolumeBar(las4hmVolume.totalBuys, las4hmVolume.totalSells, '4h');
+
     // Add new trade to the top of the array
     if(amountUSD > threshold1) {
       tradeData[tradingPair].unshift({
@@ -168,3 +208,18 @@ function playNextSound() {
 
 // Setup WebSocket for each trading pair
 tradingPairs.forEach(setupWebSocket);
+
+function updateVolumeBar(buys, sells, type) {
+  const total = parseFloat(buys) + parseFloat(sells);
+  const buyPercentage = (buys / total) * 100;
+  const sellPercentage = (sells / total) * 100;
+
+  const buySection = document.getElementById('buy' + type);
+  const sellSection = document.getElementById('sell' + type);
+
+  buySection.style.width = `${buyPercentage}%`;
+  sellSection.style.width = `${sellPercentage}%`;
+
+  buySection.innerHTML = `<span class="text"><b>$</b>${formatNumber(parseFloat(buys))}</span>`;
+  sellSection.innerHTML = `<span class="text"><b>$</b>${formatNumber(parseFloat(sells))}</span>`;
+}
